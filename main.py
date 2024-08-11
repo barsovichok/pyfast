@@ -2,9 +2,9 @@ import json
 
 from fastapi import FastAPI
 
-from support_data import SupportData
-from user_data import UserData, NewUser
-from user_response import UserResponse
+from models.support_data import SupportData
+from models.user_data import UserData, NewUser
+from models.user_response import UserResponse
 
 app = FastAPI()
 
@@ -32,7 +32,7 @@ async def get_user(user_id: int):
     return response
 
 
-@app.post("/api/users/", response_model=UserResponse)
+@app.post("/api/users/", response_model=UserResponse, status_code=201)
 def create_user(user: NewUser):
     user_data = UserData(
         email=user.email,
@@ -65,3 +65,8 @@ def update_user(user: NewUser, user_id: int):
     )
     response = UserResponse(data=user_data, support=support_data)
     return response
+
+
+@app.delete("/api/users/{user_id}", status_code=204)
+def delete_user():
+    return None

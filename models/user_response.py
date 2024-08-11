@@ -1,7 +1,6 @@
-import time
 from pydantic import BaseModel
-from user_data import UserData, NewUser
-from support_data import SupportData
+from models.user_data import UserData, NewUser
+from models.support_data import SupportData
 
 
 class UserResponse(BaseModel):
