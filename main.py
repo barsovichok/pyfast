@@ -1,14 +1,14 @@
 import json
 from http import HTTPStatus
-import uvicorn
 from fastapi import FastAPI, HTTPException
+from fastapi_pagination import Page, add_pagination, paginate
 
 from models.AppStatus import AppStatus
-from models.support_data import SupportData
 from models.User import User
-from models.user_response import UserResponse
+
 
 app = FastAPI()
+add_pagination(app)
 
 with open('users.json') as file_data:
     users = json.load(file_data)
@@ -22,8 +22,8 @@ def check_status() -> AppStatus:
 
 
 @app.get("/api/users", status_code=HTTPStatus.OK)
-def get_users() -> list[User]:
-    return users
+def get_users() -> Page[User]:
+    return paginate(users)
 
 
 @app.get("/api/users/{user_id}", status_code=HTTPStatus.OK)
@@ -35,7 +35,7 @@ def get_user(user_id: int) -> User:
     return users[user_id - 1]
 
 
-@app.post("/api/users/", response_model=UserResponse, status_code=201)
+@app.post("/api/users/", response_model=User, status_code=201)
 def create_user(user: User):
     user_data = User(
         email=user.email,
@@ -44,15 +44,10 @@ def create_user(user: User):
         avatar=user.avatar,
     )
 
-    support_data = SupportData(
-        url="https://reqres.in/#support-heading",
-        text="To keep ReqRes free, contributions towards server costs are appreciated!"
-    )
-    response = UserResponse(data=user_data, support=support_data)
-    return response
+    return user_data
 
 
-@app.put("/api/users/{user_id}", response_model=UserResponse)
+@app.put("/api/users/{user_id}", response_model=User)
 def update_user(user: User, user_id: int):
     user_data = User(
         id=user_id,
@@ -61,15 +56,9 @@ def update_user(user: User, user_id: int):
         last_name=user.last_name,
         avatar=user.avatar,
     )
-
-    support_data = SupportData(
-        url="https://reqres.in/#support-heading",
-        text="To keep ReqRes free, contributions towards server costs are appreciated!"
-    )
-    response = UserResponse(data=user_data, support=support_data)
-    return response
+    return user_data
 
 
-@app.delete("/api/users/{user_id}", status_code=204)
-def delete_user():
+@app.delete("/api/users/{user_id}", status_code=HTTPStatus.NO_CONTENT)
+def delete_user(user_id: int):
     return None
