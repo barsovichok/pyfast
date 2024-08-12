@@ -1,7 +1,7 @@
 import json
 from http import HTTPStatus
 import pytest
-from models.User import User
+from app.models.User import User
 import requests
 
 

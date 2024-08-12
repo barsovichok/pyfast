@@ -3,7 +3,7 @@ from http import HTTPStatus
 import requests
 import pytest
 from test_api_routes import users
-from models.User import User
+from app.models.User import User
 
 
 def test_pagination_existed(app_url):
