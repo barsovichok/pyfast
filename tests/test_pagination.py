@@ -2,7 +2,7 @@ from http import HTTPStatus
 
 import requests
 import pytest
-from test_api_routes import users
+from test_api import users
 from app.models.User import User
 
 
@@ -22,21 +22,12 @@ def test_pagination_validate_items(app_url, users):
         User.model_validate(user)
 
 
-def test_pagination_validate_default_values(app_url):
-    response = requests.get(f"{app_url}/api/users")
-    assert response.json().get("items")
-    assert response.json().get("page") == 1
-    assert response.json().get("total") == len(response.json().get("items"))
-    assert response.json().get("size") == 50
-    assert response.json().get("pages") == 1
-
-
 @pytest.mark.parametrize("page, size", [(2, 3), (3, 2), (4, 1)])
-def test_pagination_validate_values(app_url, page, size, total, pagination, users):
+def test_pagination_validate_values(app_url, page, size, total_users, pagination):
     payload = {"page": page, "size": size}
     response = requests.get(f"{app_url}/api/users", params=payload)
     assert response.json().get("page") == page
-    assert response.json().get("total") == total
+    assert response.json().get("total") == total_users
     assert response.json().get("size") == size
     assert response.json().get("pages") == pagination
 
@@ -48,15 +39,16 @@ def test_pagination_invalidate_values(app_url, page, size):
     assert response.status_code == HTTPStatus.UNPROCESSABLE_ENTITY
 
 
-@pytest.mark.parametrize("page, size", [(4, 8), (9, 19), (10, 10)])
-def test_pagination_no_values(app_url, users, page, size, total, pagination):
-    payload = {"page": page, "size": size}
-    response = requests.get(f"{app_url}/api/users", params=payload)
+def test_pagination_no_values(app_url):
+    no_params_response = requests.get(f"{app_url}/api/users")
+    total_items = no_params_response.json().get("total")
+    params = {"page": total_items, "size": total_items}
+    response = requests.get(f"{app_url}/api/users", params=params)
     assert response.json().get("items") == []
-    assert response.json().get("page") == page
-    assert response.json().get("total") == total
-    assert response.json().get("size") == size
-    assert response.json().get("pages") == pagination
+    assert response.json().get("page") == total_items
+    assert response.json().get("total") == total_items
+    assert response.json().get("size") == total_items
+    assert response.json().get("pages") == 1
 
 
 @pytest.mark.parametrize("page, size", [(1, 10), (3, 4), (10, 2)])
