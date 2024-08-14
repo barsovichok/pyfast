@@ -30,13 +30,13 @@ def get_user(user_id: int) -> User:
 
 
 @router.post("/", status_code=HTTPStatus.CREATED)
-def create_user(user: User) -> User:
-    UserCreate.model_validate(user.model_dump())
+def create_user(user: UserCreate) -> User:
+    UserCreate.model_validate(user)
     return users.create_user(user)
 
 
 @router.patch("/{user_id}", status_code=HTTPStatus.OK)
-def update_user(user_id: int, user: User):
+def update_user(user_id: int, user: UserUpdate):
     if user_id <= 0:
         raise HTTPException(status_code=HTTPStatus.UNPROCESSABLE_ENTITY, detail="User ID must be a positive integer")
     UserUpdate.model_validate(user.model_dump())

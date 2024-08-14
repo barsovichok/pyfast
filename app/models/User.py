@@ -14,10 +14,11 @@ class UserCreate(BaseModel):
     email: EmailStr
     first_name: str
     last_name: str
-    avatar: str = HttpUrl
+    avatar: HttpUrl
 
 
 class UserUpdate(BaseModel):
+    id: int
     email: EmailStr | None = None
     first_name: str | None = None
     last_name: str | None = None
