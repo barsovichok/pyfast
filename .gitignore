@@ -1,0 +1,36 @@
+# Default ignored files
+/shelf/
+/workspace.xml
+# Editor-based HTTP Client requests
+/httpRequests/
+# Datasource local storage ignored files
+/dataSources/
+/dataSources.local.xml
+.env
+ ../.env
+../.idea/
+../__pycache__/
+__pycache__/
+database/__pycache__/
+models/__pycache__/
+routers/__pycache__/
+../tests/__pycache__/
+/.idea/httpRequests/2024-08-09T233351.500.txt
+/.idea/httpRequests/2024-08-09T233356.500.txt
+/.idea/httpRequests/2024-08-09T233406.500.txt
+/.idea/httpRequests/2024-08-09T233424.500.txt
+/.idea/httpRequests/2024-08-09T233445.200.json
+/.idea/httpRequests/2024-08-09T233537.200.json
+/.idea/httpRequests/2024-08-09T233556.200.json
+/.idea/httpRequests/2024-08-09T233620.200.json
+/.idea/httpRequests/http-client.cookies
+/.idea/httpRequests/http-requests-log.http
+/.idea/misc.xml
+/.idea/modules.xml
+/.idea/inspectionProfiles/profiles_settings.xml
+/.idea/pyfast.iml
+/.idea/shelf/Uncommitted_changes_before_rebase_[Changes]/shelved.patch
+/.idea/shelf/Uncommitted_changes_before_rebase__Changes_.xml
+/.idea/vcs.xml
+/.idea/workspace.xml
+/.idea/shelf/Uncommitted_changes_before_rebase_[Changes]/shelved.patch
