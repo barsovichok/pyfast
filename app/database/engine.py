@@ -8,10 +8,12 @@ engine = create_engine(url=os.getenv("DATABASE_ENGINE"), pool_size=int(os.getenv
 
 
 def create_db_and_tables():
+    """Create database"""
     SQLModel.metadata.create_all(engine)
 
 
 def check_availability() -> bool:
+    """Check database availability"""
     try:
         with Session(engine) as session:
             session.exec(select(text("1")))

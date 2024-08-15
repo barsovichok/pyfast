@@ -16,5 +16,6 @@ app.include_router(users.router)
 add_pagination(app)
 
 if __name__ == "__main__":
+    """Create the database and tables and run the FastAPI server."""
     create_db_and_tables()
     uvicorn.run(app, host="localhost", port=8000)

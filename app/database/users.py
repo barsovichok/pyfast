@@ -9,16 +9,19 @@ from ..models.User import User, UserCreate, UserUpdate
 
 
 def get_user(user_id: int) -> User | None:
+    """Return user by ID from the database."""
     with Session(engine) as session:
         return session.get(User, user_id)
 
 
 def get_users() -> Sequence[User] | None:
+    """Return all users from the database."""
     with Session(engine) as session:
         return session.exec(select(User)).all()
 
 
 def get_count_users() -> int:
+    """Return count of users in the database."""
     with Session(engine) as session:
         users_column = table('user', column('id'))
         statement = select(func.count()).select_from(users_column)
@@ -26,6 +29,7 @@ def get_count_users() -> int:
 
 
 def create_user(creating_user: UserCreate) -> User:
+    """Create new user. Returns created user."""
     with Session(engine) as session:
         cast_user = User(email=creating_user.email,
                          first_name=creating_user.first_name,
@@ -38,6 +42,7 @@ def create_user(creating_user: UserCreate) -> User:
 
 
 def delete_user(user_id: int) -> bool:
+    """Delete user by ID. Returns True if successful, else False."""
     try:
         with Session(engine) as session:
             user = session.get(User, user_id)
@@ -50,6 +55,7 @@ def delete_user(user_id: int) -> bool:
 
 
 def update_user(user_id: int, user: UserUpdate) -> HTTPException | Type[User]:
+    """Update user data. Returns 404 if user not found, else updated user."""
     with Session(engine) as session:
         db_user = session.get(User, user_id)
         if not db_user:
