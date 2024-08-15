@@ -1,84 +1,183 @@
+Sure! Below is a revised version of the README file based on your requirements:
 
-#### Overview
-PyFast is a server-side application built with FastAPI, featuring a set of endpoints for user management. It also includes tests to verify the functionality of the API and its schemas.
+---
 
-#### Project Structure
-The project is organized as follows:
+# PyFast
 
-- `test_pyfast.py` – Tests for verifying API functionality.
-- `main.py` – File for starting the server.
+PyFast is a web API project built with Python and FastAPI. It is designed to provide a robust and scalable RESTful API service. This project uses SQLModel for ORM, PostgreSQL as the database, and other modern Python libraries to deliver high performance and reliability.
 
-#### Installation
+## Table of Contents
 
-1. Clone the repository:
+- [Technologies](#technologies)
+- [Libraries and Requirements](#libraries-and-requirements)
+- [API Routes](#api-routes)
+- [Setup](#setup)
+- [Running Tests](#running-tests)
+- [Examples of HTTP Requests](#examples-of-http-requests)
+
+## Technologies
+
+- **Python 3.x**
+- **FastAPI**: A modern, fast (high-performance) web framework for building APIs with Python 3.6+ based on standard Python type hints.
+- **SQLModel**: A library for interacting with SQL databases, built on top of SQLAlchemy and Pydantic, designed to work seamlessly with FastAPI.
+- **PostgreSQL**: An advanced, enterprise-class open-source relational database.
+- **Pydantic**: Data validation and settings management using Python type annotations.
+- **Uvicorn**: ASGI server implementation, using `uvloop` and `httptools`.
+
+## Libraries and Requirements
+
+To install the required libraries, use the following command:
+
+```bash
+pip install -r requirements.txt
+```
+
+### Key Dependencies
+
+- `fastapi`
+- `uvicorn`
+- `sqlmodel`
+- `pydantic`
+- `psycopg2-binary` (for PostgreSQL database connectivity)
+
+## API Routes
+
+Here are the main API routes provided by the PyFast application:
+
+- `GET /users/`: Retrieve a list of users.
+- `GET /users/{id}`: Retrieve details of a specific user by ID.
+- `POST /users/`: Create a new user.
+- `PUT /users/{id}`: Update an existing user by ID.
+- `DELETE /users/{id}`: Delete a user by ID.
+
+_Note: You can explore the full API documentation using the built-in Swagger UI at `/docs` after running the server._
+
+## Setup
+
+To set up and run this project locally, follow these steps:
+
+1. **Clone the repository**:
+
+    ```bash
+    git clone https://github.com/barsovichok/pyfast.git
+    cd pyfast
     ```
-    git clone <repository_url>
-    cd <repository_folder>
+
+2. **Create a virtual environment**:
+
+    ```bash
+    python -m venv venv
+    source venv/bin/activate  # On Windows use `venv\Scripts\activate`
     ```
 
-3. Install dependencies:
-    ```
+3. **Install the dependencies**:
+
+    ```bash
     pip install -r requirements.txt
     ```
 
-#### Running the Server
-To start the server, use one of the following commands:
+4. **Set up environment variables**:
 
+    Create a `.env` file in the root directory and configure the necessary environment variables (you can also find the example in the .env.sample file):
+
+    ```plaintext
+    APP_URL = "localhost:8000"
+    DATABASE_ENGINE=postgresql+psycopg2://user:password@localhost/dbname
+    DATABASE_POOL_SIZE=10
+    ```
+
+5. **Start the application**:
+
+    ```bash
+    uvicorn app.main:app --reload
+    ```
+
+6. **Access the application**:
+
+    Open your browser and go to `http://127.0.0.1:8000` to see the API in action.
+
+## Running Tests
+
+To run tests, make sure you have `pytest` installed:
+
+```bash
+pip install pytest
 ```
-uvicorn main:app --reload
+
+Then, execute the tests using:
+
+```bash
+pytest
 ```
 
+This will run all the tests in the repository and provide you with a report on the outcomes.
 
-#### API
+## Examples of HTTP Requests
 
-##### Endpoints
+Here are some examples of HTTP requests you can make to the API using models from the project:
 
-- **GET /api/users/{user_id}**: Return a fake user.
-- **POST /api/users**: Creates a new fake user. 
-- **PUT /api/users/{user_id}**: Update fake user
+### Get All Users
 
-You can see more info in Swagger Documentation http://127.0.0.1:8000/dosc
-
-##### Example Requests
-
-- **Get Users**:
-    ```curl -X 'GET' \
-  'http://127.0.0.1:8000/api/users/1723240738' \
+```bash
+curl -X 'GET' \
+  'http://127.0.0.1:8000/users/' \
   -H 'accept: application/json'
-    ```
-
-- **Create User (JSON)**:
-    ```
-    curl -X 'POST' \
-  'http://127.0.0.1:8000/api/users/' \
-  -H 'accept: application/json' \
-  -H 'Content-Type: application/json' \
-  -d '{
-  "email": "string",
-  "first_name": "string",
-  "last_name": "string",
-  "avatar": "string"}'
-    ```
-- **Update User (JSON)**:
-    ```
-    curl -X 'PUT' \
-  'http://127.0.0.1:8000/api/users/1723240738' \
-  -H 'accept: application/json' \
-  -H 'Content-Type: application/json' \
-  -d '{
-  "email": "string",
-  "first_name": "string",
-  "last_name": "string",
-  "avatar": "string"}'
-    ```
-
-#### Testing
-To run the tests, execute the following command:
-
-```
-pytest -sv test_pyfast.py
 ```
 
-**Note:**
-- Ensure that the server is running before executing the tests.
-- The `test_pyfast.py` file includes both schema validation tests and API logic tests.
+### Get User by ID
+
+```bash
+curl -X 'GET' \
+  'http://127.0.0.1:8000/users/1' \
+  -H 'accept: application/json'
+```
+
+### Create a New User
+
+```bash
+curl -X 'POST' \
+  'http://127.0.0.1:8000/users/' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "username": "newuser",
+  "email": "newuser@example.com",
+  "first_name": "New",
+  "last_name": "User",
+  "avatar": "https://example.com/avatar.jpg"
+}'
+```
+
+### Update a User
+
+```bash
+curl -X 'PUT' \
+  'http://127.0.0.1:8000/users/1' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "username": "updateduser",
+  "email": "updateduser@example.com",
+  "first_name": "Updated",
+  "last_name": "User",
+  "avatar": "https://example.com/updated-avatar.jpg"
+}'
+```
+
+### Delete a User
+
+```bash
+curl -X 'DELETE' \
+  'http://127.0.0.1:8000/users/1' \
+  -H 'accept: application/json'
+```
+
+## Contributing
+
+Feel free to fork this repository, make changes, and submit pull requests. Any contributions are welcome!
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+---
+
+This README now includes information about `SQLModel` instead of Alembic, uses the correct models in the HTTP request examples, and omits any mention of database migrations, aligning it with your project's requirements.
