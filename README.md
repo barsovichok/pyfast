@@ -170,6 +170,13 @@ curl -X 'DELETE' \
   -H 'accept: application/json'
 ```
 
+## Work with Docker
+We buil docker image by this command: docker build . -t pyfast 
+We run project in Docker by this command -  docker run -e DATABASE_ENGINE=postgresql+psycopg2://postgres:example@host.docker.internal:5432/postgres -e DATABASE_POOL_SIZE=100 -p 8002:80 pyfast
+or by docker compose up.
+Also helping program - docker compose down
+
+
 ## Contributing
 
 Feel free to fork this repository, make changes, and submit pull requests. Any contributions are welcome!
