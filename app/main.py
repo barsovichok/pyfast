@@ -1,24 +1,31 @@
 import logging
 from contextlib import asynccontextmanager
-
+from typing import AsyncGenerator
 import dotenv
 
+dotenv.load_dotenv()
 import uvicorn
 from fastapi import FastAPI
 from fastapi_pagination import add_pagination
 
-dotenv.load_dotenv()
 from app.database.engine import create_db_and_tables
 from app.routers import status, users
 
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
+
 
 @asynccontextmanager
-async def lifespan(app: FastAPI):
+async def lifespan(application: FastAPI) -> AsyncGenerator[None, None]:
     """FastAPI lifespan hook."""
-    logging.warning("Pyfast in started")
-    create_db_and_tables()
+    logging.info("Pyfast in started")
+    try:
+        create_db_and_tables()
+        application.state.db_initialized = True
+    except Exception as e:
+        logging.error(f"Error during DB initialization: {e}")
+        raise
     yield
-    logging.warning("Pyfast in stopped")
+    logging.info("Pyfast in stopped")
 
 
 app = FastAPI(lifespan=lifespan)
