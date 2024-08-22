@@ -1,10 +1,13 @@
+
 from http import HTTPStatus
 
 from fastapi import APIRouter, HTTPException
 from fastapi_pagination import Page, paginate
 
-from app.database import users
+from app.database.postgres import users
+from app.kafka.Producer import send_event_to_kafka
 from app.models.User import User, UserCreate, UserUpdate
+from app.routers.data import metrics
 
 router = APIRouter(prefix="/api/users")
 
@@ -36,7 +39,11 @@ def get_user(user_id: int) -> User:
 def create_user(user: UserCreate) -> User:
     """Creates a new user"""
     UserCreate.model_validate(user)
-    return users.create_user(user)
+    created_user = users.create_user(user)
+    """Sends data to the kafka server"""
+    send_event_to_kafka("create_user", f"{created_user.model_dump()}")
+    metrics()
+    return created_user
 
 
 @router.patch("/{user_id}", status_code=HTTPStatus.OK)
@@ -57,3 +64,5 @@ def delete_user(user_id: int):
         raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail="User not found")
     users.delete_user(user_id)
     return {"message": "User deleted successfully"}
+
+

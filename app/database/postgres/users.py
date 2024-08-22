@@ -5,7 +5,7 @@ from sqlalchemy import table, column
 from .engine import engine
 from sqlmodel import Session, select, func
 
-from ..models.User import User, UserCreate, UserUpdate
+from app.models.User import User, UserCreate, UserUpdate
 
 
 def get_user(user_id: int) -> User | None:

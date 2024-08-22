@@ -2,7 +2,7 @@ from http import HTTPStatus
 
 from fastapi import APIRouter
 
-from app.database.engine import check_availability
+from app.database.postgres.engine import check_availability
 from app.models.AppStatus import AppStatus
 
 router = APIRouter()
