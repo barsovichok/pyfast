@@ -30,7 +30,7 @@ def total_users() -> int:
 @pytest.fixture(scope="module")
 def json_payloads(app_url):
     """Returns test data payloads from a JSON file."""
-    with open("users.json") as f:
+    with open("tests/users.json") as f:
         test_data_payloads = json.load(f)
         return test_data_payloads
 
