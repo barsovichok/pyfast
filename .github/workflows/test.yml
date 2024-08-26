@@ -10,7 +10,7 @@ jobs:
     env:
       POSTGRES_USER: ${{secrets.POSTGRES_USER}}
       POSTGRES_PASSWORD: ${{secrets.POSTGRES_PASSWORD}}
-      DATABASE_ENGINE: postgresql+psycopg2://${POSTGRES_USER}:${POSTGRES_PASSWORD}@localhost:5432/${POSTGRES_USER}
+      DATABASE_ENGINE: postgresql+psycopg2://${{secrets.POSTGRES_USER}}:${{secrets.POSTGRES_PASSWORD}}@localhost:5432/${{secrets.DATABASE_POOL_SIZE}}
       DATABASE_POOL_SIZE: ${{secrets.DATABASE_POOL_SIZE}}
     steps:
       - uses: actions/checkout@v4
