@@ -8,10 +8,10 @@ jobs:
     name: Test App
     runs-on:  ubuntu-latest
     env:
-      POSTGRES_USER: test
-      POSTGRES_PASSWORD: test
-      DATABASE_ENGINE: postgresql+psycopg2://test:test@localhost:5432/test
-      DATABASE_POOL_SIZE: 100
+      POSTGRES_USER: ${{secrets.POSTGRES_USER}}
+      POSTGRES_PASSWORD: ${{secrets.POSTGRES_PASSWORD}}
+      DATABASE_ENGINE: postgresql+psycopg2://${POSTGRES_USER}:${POSTGRES_PASSWORD§§}@localhost:5432/${POSTGRES_USER}
+      DATABASE_POOL_SIZE: ${{DATABASE_POOL_SIZE}}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -23,7 +23,7 @@ jobs:
       - run: docker compose up -d
       - run: pytest tests --junit-xml=test-results.xml
         env:
-          APP_URL: 'http://127.0.0.1:8002'
+          APP_URL: ${{secrets.APP_URL}}
 
       - run: docker compose logs app
         if: always()
